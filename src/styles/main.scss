@@ -1,0 +1,212 @@
+:root {
+  --ff-default: Verdana, Geneva, Tahoma, sans-serif;
+
+  --c-background: #eaeaea;
+  --c-menu: #ffffff;
+  --c-menu-dark: #c0c0c0;
+  --c-menu-item: #e0e0e0;
+  --c-error: #f0a0a0;
+
+  --ct-default: #000000;
+  --ct-dark: var(--c-background);
+  --ct-error: #600000;
+
+  --cb-default: #808080;
+  --cb-error: #600000;
+
+  --cs-default: color-mix(in srgb, var(--ct-default) 30%, transparent);
+}
+
+* {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  color: var(--ct-default);
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  background-color: var(--c-background);
+  width: 100vw;
+  height: 100vh;
+  font-family: var(--ff-default);
+  user-select: none;
+}
+
+div,
+form {
+  display: flex;
+}
+
+button {
+  transition: opacity, background-color;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-in-out;
+  cursor: pointer;
+  border: 0.0625rem solid var(--cb-default);
+  border-radius: 100rem;
+  background-color: var(--c-menu-item);
+  padding: 0.125rem 0.25rem;
+  font-size: 1rem;
+
+  &:active:hover {
+    background-color: var(--c-menu-dark);
+  }
+}
+
+button:disabled,
+input:disabled,
+label:has(+ input[type="radio"]:disabled) {
+  opacity: 0.5;
+  cursor: default;
+  background-color: var(--c-menu-item);
+}
+
+input {
+  transition: opacity, background-color, color, border-color;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-in-out;
+  cursor: pointer;
+  border: 0.0625rem solid var(--cb-default);
+  border-radius: 0.25rem;
+  background-color: var(--c-menu);
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+
+  &[type="checkbox"] {
+    aspect-ratio: 1 / 1;
+    width: 1.5rem;
+  }
+
+  &[type="text"],
+  &[type="password"],
+  &[type="email"] {
+    cursor: text;
+  }
+
+  &.invalid:not(:disabled) {
+    border-color: var(--cb-error);
+    background-color: var(--c-error);
+    color: var(--ct-error);
+    ::placeholder {
+      color: var(--ct-error);
+    }
+  }
+}
+
+label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+label + input[type="radio"] {
+  display: none;
+}
+label:has(+ input[type="radio"]) {
+  transition: background-color;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-in-out;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  background-color: var(--c-menu-item);
+  padding: 0.5rem 1rem;
+  text-align: center;
+
+  &:has(+ input[type="radio"]:checked) {
+    background-color: var(--c-menu-dark);
+  }
+}
+
+#auth-screen {
+  position: fixed;
+  position: absolute;
+  z-index: 99;
+  backdrop-filter: blur(0.25rem) brightness(0.75);
+  transition: opacity;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in-out;
+  inset: 0;
+
+  &:has(.shown.logged-in) {
+    cursor: pointer;
+  }
+
+  &:not(:has(.shown)):not(:has(.waiting)) {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+#auth {
+  display: grid;
+  position: absolute;
+  grid-template-rows: repeat(5, 1fr);
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: 1rem;
+  row-gap: 2rem;
+  align-items: center;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-in-out;
+  inset: 50% auto auto 50%;
+  box-shadow: 0 0 0.5rem var(--cs-default);
+  border-radius: 1rem;
+  background-color: var(--c-menu);
+  padding: 2rem;
+  width: 40rem;
+
+  &.shown {
+    opacity: 1;
+    transition-delay: 0.15s;
+    pointer-events: auto;
+  }
+
+  > * {
+    height: 100%;
+  }
+
+  label:has(+ input[type="radio"]) {
+    grid-column: span 3;
+  }
+
+  label:not(:has(+ input[type="radio"])) {
+    grid-column: 1 / span 2;
+  }
+
+  input {
+    &[type="email"] {
+      grid-column: 3 / -1;
+    }
+
+    &[type="password"],
+    &[type="text"] {
+      grid-column: 3 / -2;
+    }
+
+    &[type="checkbox"] {
+      grid-column: -2;
+      margin: auto;
+    }
+  }
+
+  button[type="submit"] {
+    grid-row: -2;
+    grid-column: 5 / span 4;
+  }
+}
+
+#show-auth-screen {
+  position: fixed;
+  inset: 1rem 1rem auto auto;
+  background-color: var(--c-menu);
+  aspect-ratio: 1 / 1;
+  width: 3rem;
+}

@@ -1,0 +1,20 @@
+{
+  "name": "goodgirl",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "node build.mjs",
+    "typescript-watch": "npx esbuild src/scripts/main.ts --bundle --minify --sourcemap --format=esm --outfile=src/scripts/bundle.js --watch",
+    "sass-watch": "sass --watch src/styles:src/styles --style=compressed --no-source-map"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "esbuild": "^0.27.2",
+    "firebase": "^12.7.0",
+    "sass": "^1.97.2"
+  }
+}

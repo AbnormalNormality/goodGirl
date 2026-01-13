@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Good Girl</title>
+
+    <link rel="stylesheet" href="src/styles/main.css" />
+
+    <script src="src/scripts/bundle.js" type="module"></script>
+  </head>
+  <body>
+    owo, hai!!!! nya~
+
+    <div id="auth-screen">
+      <form id="auth" class="waiting">
+        <label for="sign-in-radio">Sign In</label>
+        <input id="sign-in-radio" name="auth-action" type="radio" value="sign-in" checked />
+        <label for="sign-up-radio">Sign Up</label>
+        <input id="sign-up-radio" name="auth-action" type="radio" value="sign-up" />
+        <label for="sign-out-radio">Sign Out</label>
+        <input id="sign-out-radio" name="auth-action" type="radio" value="sign-out" />
+        <label for="delete-radio">Delete</label>
+        <input id="delete-radio" name="auth-action" type="radio" value="delete" />
+
+        <label for="email">Email</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          placeholder="email@address.com"
+        />
+        <label for="password">Password</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          placeholder="5ecure_Password"
+        />
+        <input id="show-password" name="show-password" type="checkbox" />
+        <label for="confirm-password">Confirm Password</label>
+        <input
+          id="confirm-password"
+          name="confirm-password"
+          type="password"
+          autocomplete="new-password"
+          placeholder="5ecure_Password"
+        />
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+    <button id="show-auth-screen">👤</button>
+  </body>
+</html>
