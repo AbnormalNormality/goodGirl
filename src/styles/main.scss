@@ -161,7 +161,8 @@ label:has(+ input[type="radio"]) {
   border-radius: 1rem;
   background-color: var(--c-menu);
   padding: 2rem;
-  width: 40rem;
+  width: 50rem;
+  font-size: 1.25rem;
 
   &.shown {
     opacity: 1;
