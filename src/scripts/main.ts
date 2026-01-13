@@ -168,13 +168,13 @@ async function submitAuthForm(e: SubmitEvent) {
         // TODO: Make show as text in the auth menu
         return alert(`There is already an account using the email ${authData.email}.`);
       } else if (e.code === "auth/invalid-credential") {
-        // TODO: Make show as text in the auth menu
         return alert(`Incorrect email or password.`);
       }
     }
     console.error(e);
+  } finally {
+    authSubmitButton.disabled = false;
   }
-  authSubmitButton.disabled = false;
 }
 
 uiAuthHandler = (user: User | null) => {
