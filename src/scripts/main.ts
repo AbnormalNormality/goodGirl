@@ -7,7 +7,6 @@
 import { FirebaseError, initializeApp } from "firebase/app";
 import {
   createUserWithEmailAndPassword,
-  EmailAuthCredential,
   EmailAuthProvider,
   getAuth,
   onAuthStateChanged,
@@ -21,13 +20,9 @@ import {
   deleteDoc,
   doc,
   getDoc,
-  getDocs,
   getFirestore,
-  query,
   setDoc,
   updateDoc,
-  where,
-  writeBatch,
 } from "firebase/firestore";
 
 //#region Firebase
@@ -177,12 +172,48 @@ async function submitAuthForm(e: SubmitEvent) {
   }
 }
 
+async function getUserData(userId: string): Promise<UserData | null> {
+  const userDoc = doc(usersCol, userId);
+  const snapshot = await getDoc(userDoc);
+  const data = (snapshot?.data() as UserData) || null;
+  return data;
+}
+
+async function setUserData<K extends keyof UserData>(userId: string, key: K, value: UserData[K]) {
+  const userDoc = doc(usersCol, userId);
+  if (userDoc) await setDoc(userDoc, { [key]: value }, { merge: true });
+}
+
+let loadedUser: string | null = null;
+let onOwnPage = false;
+async function loadUser(userId: string | null) {
+  const user = userId ? await getUserData(userId) : null;
+  if (!user) {
+    nameInput.value = "";
+    loadedUser = null;
+    onOwnPage = false;
+    return;
+  }
+  nameInput.value = user.displayname;
+  loadedUser = userId;
+  onOwnPage = userId === auth.currentUser?.uid;
+}
+
 uiAuthHandler = (user: User | null) => {
   authForm.classList.toggle("logged-in", Boolean(auth.currentUser));
   authForm.classList.toggle("shown", !user);
   authForm.classList.remove("waiting");
   authFormChanged();
-  console.log(`SIGNED ${user ? "IN" : "OUT"}!`);
+
+  if (user) {
+    console.log(`SIGNED IN! UID ${user.uid}`);
+    if (!loadedUser) loadUser(user.uid);
+    if (loadedUser === user.uid) nameInput.readOnly = false;
+  } else {
+    console.log("SIGNED OUT!");
+    if (onOwnPage) loadUser(null);
+    nameInput.readOnly = true;
+  }
 };
 
 const authScreen = document.querySelector<HTMLDivElement>("#auth-screen")!;
@@ -197,6 +228,7 @@ const confPassInput = authForm.querySelector<HTMLInputElement>("#confirm-passwor
 const showPasswordCheckbox = authForm.querySelector<HTMLInputElement>("#show-password")!;
 const authSubmitButton = authForm.querySelector<HTMLButtonElement>('[type="submit"]')!;
 const showAuthScreen = document.querySelector<HTMLButtonElement>("#show-auth-screen")!;
+const nameInput = document.querySelector<HTMLInputElement>("#name")!;
 
 passwordInput.addEventListener("copy", (e) => e.preventDefault());
 confPassInput.addEventListener("copy", (e) => e.preventDefault());
@@ -214,5 +246,13 @@ showAuthScreen.addEventListener("click", () => {
   authFormChanged();
   authForm.classList.add("shown");
 });
+nameInput.addEventListener("change", () => {
+  if (!onOwnPage || !auth.currentUser) return;
+  const newName = nameInput.value.trim();
+  if (newName === "" || newName.length > 16) return;
+  setUserData(auth.currentUser.uid, "displayname", newName);
+});
 
 //#endregion
+
+loadUser(null);
