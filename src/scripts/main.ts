@@ -181,7 +181,8 @@ async function getUserData(userId: string): Promise<UserData | null> {
 
 async function setUserData<K extends keyof UserData>(userId: string, key: K, value: UserData[K]) {
   const userDoc = doc(usersCol, userId);
-  if (userDoc) await setDoc(userDoc, { [key]: value }, { merge: true });
+  const then = () => console.log(`Changed ${userId}'s ${key} to ${value}!`);
+  if (userDoc) await setDoc(userDoc, { [key]: value }, { merge: true }).then(then);
 }
 
 let loadedUser: string | null = null;

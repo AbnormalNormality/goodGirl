@@ -218,3 +218,45 @@ label:has(+ input[type="radio"]) {
   padding: 2rem;
   width: 40rem;
 }
+
+@media screen and (orientation: portrait) {
+  #auth {
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 2rem;
+    row-gap: 2rem;
+    width: 60rem;
+    height: 40rem;
+    font-size: 1.25rem;
+
+    label:has(+ input[type="radio"]) {
+      grid-column: span 2;
+    }
+
+    label:not(:has(+ input[type="radio"])) {
+      grid-column: 1;
+    }
+
+    input {
+      &[type="email"] {
+        grid-column: 2 / -1;
+      }
+
+      &[type="password"],
+      &[type="text"] {
+        grid-column: 2 / -2;
+      }
+
+      &[type="checkbox"] {
+        grid-column: -2;
+        margin: auto;
+      }
+    }
+
+    button[type="submit"] {
+      grid-row: -2;
+      grid-column: 1 / -1;
+    }
+  }
+}
